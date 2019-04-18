@@ -48,11 +48,13 @@ def plot(bp_list):
     slope = dy / dt
 
     plt.plot(x, y)
+    plt.plot([x_start, x_end], [y_start, y_end], c = 'r')
     plt.xlabel("Date/Time")
-    plt.ylabel("Barometric Pressure")
-    plt.title("Slope = {0:.6f} inHg/day".format(slope))
-    plt.suptitle("Pond Oreille Barometric Pressure")
+    plt.ylabel("Barometric Pressure (inHg)")
+    plt.title("Slope = {0:.6f} inHg/day".format(slope), fontsize=10, fontweight='bold')
+    plt.suptitle(f"{x[0]} --> {x[len(x)-1]}", fontsize=11)
     plt.gcf().autofmt_xdate()
+    plt.gcf().canvas.set_window_title("Pond Oreille Barometric Pressure")
     plt.show()
 
 
