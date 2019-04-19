@@ -70,8 +70,14 @@ if __name__ == "__main__":
     start_arg = args.start
     end_arg = args.end
 
-    start_date = convert_to_datetime(start_arg)
-    end_date = convert_to_datetime(end_arg)
+    if start_arg and end_arg:
+        start_date = convert_to_datetime(start_arg)
+        end_date = convert_to_datetime(end_arg)
+    else:
+        print("Enter start date and end date:")
+        print("-s --start YYYY-MM-DD.HH:MM:SS")
+        print("-e --end  YYYY-MM-DD.HH:MM:SS")
+        exit(1)
 
     if not start_date or not end_date:
         print("Invalid date formats entered")
