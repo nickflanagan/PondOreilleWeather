@@ -46,9 +46,13 @@ def plot(bp_list):
     dy = y_end - y_start
     dt = x_end - x_start
     slope = dy / dt
+    if slope > 0:
+        slope_color = 'green'
+    else:
+        slope_color = 'red'
 
     plt.plot(x, y)
-    plt.plot([x_start, x_end], [y_start, y_end], c = 'r')
+    plt.plot([x_start, x_end], [y_start, y_end], c = slope_color)
     plt.xlabel("Date/Time")
     plt.ylabel("Barometric Pressure (inHg)")
     plt.title("Slope = {0:.6f} inHg/day".format(slope), fontsize=10, fontweight='bold')
