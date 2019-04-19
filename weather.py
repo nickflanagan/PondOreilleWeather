@@ -1,7 +1,8 @@
 import argparse
 import datetime
-from matplotlib.dates import date2num, num2date
+from matplotlib.dates import date2num
 import matplotlib.pyplot as plt
+import os
 
 
 def convert_to_datetime(datetime_str):
@@ -16,7 +17,12 @@ def main(start, end):
     files = []
     barometric_data = []
     for year in range(int(start.year), int(end.year) + 1):
-        files.append(f"resources/Environmental_Data_Deep_Moor_{year}.txt")
+        data_file = f"resources/Environmental_Data_Deep_Moor_{year}.txt"
+        if os.path.isfile(data_file):
+            files.append(data_file)
+        else:
+            print("Date out of range")
+            exit(1)
     for file in files:
         with open(file, 'r') as f:
             f.readline()
@@ -52,7 +58,7 @@ def plot(bp_list):
         slope_color = 'red'
 
     plt.plot(x, y)
-    plt.plot([x_start, x_end], [y_start, y_end], c = slope_color)
+    plt.plot([x_start, x_end], [y_start, y_end], c=slope_color)
     plt.xlabel("Date/Time")
     plt.ylabel("Barometric Pressure (inHg)")
     plt.title("Slope = {0:.6f} inHg/day".format(slope), fontsize=10, fontweight='bold')
@@ -67,12 +73,12 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--start", help="Enter Start Date.Time (YYYY-MM-DD.HH:MM:SS")
     parser.add_argument("-e", "--end", help="Enter End Date.Time (YYYY-MM-DD.HH:MM:SS")
     args = parser.parse_args()
-    start_arg = args.start
-    end_arg = args.end
+    start_date = args.start
+    end_date = args.end
 
-    if start_arg and end_arg:
-        start_date = convert_to_datetime(start_arg)
-        end_date = convert_to_datetime(end_arg)
+    if start_date and end_date:
+        start_date = convert_to_datetime(start_date)
+        end_date = convert_to_datetime(end_date)
     else:
         print("Enter start date and end date:")
         print("-s --start YYYY-MM-DD.HH:MM:SS")
@@ -82,7 +88,10 @@ if __name__ == "__main__":
     if not start_date or not end_date:
         print("Invalid date formats entered")
         exit(1)
-
+    if start_date > end_date:
+        print("Start date is > end date")
+        print("Please use correct date ranges.")
+        exit(1)
     barometric = main(start_date, end_date)
 
     plot(barometric)
